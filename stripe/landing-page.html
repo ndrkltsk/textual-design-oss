@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <style>
+    /* CSS Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Colors */
+      --color-primary: #635BFF;
+      --color-primary-dark: #5851EB;
+      --color-primary-darker: #4B45D1;
+      --color-cyan: #00D4FF;
+      --color-green: #0ACF97;
+
+      /* Neutrals */
+      --color-gray-50: #F7FAFC;
+      --color-gray-100: #F6F9FC;
+      --color-gray-200: #E3E8EE;
+      --color-gray-500: #8898AA;
+      --color-gray-600: #697386;
+      --color-gray-700: #545969;
+      --color-gray-800: #3C4257;
+      --color-gray-900: #1A1F36;
+
+      /* Typography */
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 200ms ease;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-gray-800);
+      background: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-gray-200);
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-gray-600);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      color: var(--color-gray-900);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:active {
+      background: var(--color-primary-darker);
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background: #FFFFFF;
+      color: var(--color-gray-800);
+      border: 1px solid var(--color-gray-200);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-gray-50);
+      border-color: var(--color-gray-200);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-gray-600);
+    }
+
+    .btn-ghost:hover {
+      color: var(--color-gray-900);
+      background: var(--color-gray-50);
+    }
+
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 16px;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 160px 0 var(--space-24);
+      overflow: hidden;
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--color-gray-50) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.15) 0%, rgba(99, 91, 255, 0.05) 100%);
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(15, 190, 240, 0.15) 0%, rgba(15, 190, 240, 0.05) 100%);
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 6px 12px;
+      background: rgba(99, 91, 255, 0.08);
+      color: var(--color-primary);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 9999px;
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-title {
+      font-size: 60px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #0FBEF0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-description {
+      font-size: 20px;
+      line-height: 1.6;
+      color: var(--color-gray-600);
+      margin-bottom: var(--space-8);
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-12);
+    }
+
+    .hero-image {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      background: var(--color-gray-100);
+      aspect-ratio: 16/9;
+    }
+
+    .hero-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+      color: var(--color-gray-500);
+      font-size: 14px;
+    }
+
+    /* Features Section */
+    .features {
+      padding: var(--space-24) 0;
+      background: #FFFFFF;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto var(--space-16);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: var(--space-3);
+    }
+
+    .section-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .section-description {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--color-gray-600);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    .feature-card {
+      padding: var(--space-6);
+      background: #FFFFFF;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-gray-200);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 91, 255, 0.08);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-primary);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .feature-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-gray-600);
+    }
+
+    /* Stats Section */
+    .stats {
+      padding: var(--space-24) 0;
+      background: var(--color-gray-900);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-8);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #FFFFFF;
+      margin-bottom: var(--space-2);
+    }
+
+    .stat-value span {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #0FBEF0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--color-gray-500);
+    }
+
+    /* Pricing Section */
+    .pricing {
+      padding: var(--space-24) 0;
+      background: var(--color-gray-50);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--color-primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+    }
+
+    .pricing-header {
+      text-align: center;
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--color-gray-200);
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .pricing-price {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      line-height: 1;
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-gray-600);
+    }
+
+    .pricing-description {
+      font-size: 14px;
+      color: var(--color-gray-600);
+      margin-top: var(--space-2);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 14px;
+      color: var(--color-gray-700);
+      padding: var(--space-2) 0;
+    }
+
+    .pricing-features li svg {
+      width: 16px;
+      height: 16px;
+      color: var(--color-green);
+      flex-shrink: 0;
+    }
+
+    .pricing-action {
+      width: 100%;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: var(--space-24) 0;
+      background: linear-gradient(135deg, var(--color-gray-900) 0%, #121826 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.3) 0%, rgba(99, 91, 255, 0.1) 100%);
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+
+    .cta-content {
+      position: relative;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #FFFFFF;
+      margin-bottom: var(--space-4);
+    }
+
+    .cta-description {
+      font-size: 18px;
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-8);
+    }
+
+    /* Footer */
+    .footer {
+      padding: var(--space-16) 0 var(--space-8);
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    .footer-brand {
+      max-width: 240px;
+    }
+
+    .footer-logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--color-gray-600);
+      line-height: 1.6;
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: var(--space-2);
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: var(--color-gray-600);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-gray-900);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      color: var(--color-gray-600);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: var(--space-6);
+    }
+
+    .footer-legal a {
+      font-size: 14px;
+      color: var(--color-gray-600);
+      text-decoration: none;
+    }
+
+    .footer-legal a:hover {
+      color: var(--color-gray-900);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-12);
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-description {
+        font-size: 18px;
+      }
+
+      .section-title {
+        font-size: 32px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="logo">acme</a>
+        <nav class="nav">
+          <a href="#" class="nav-link">Products</a>
+          <a href="#" class="nav-link">Solutions</a>
+          <a href="#" class="nav-link">Developers</a>
+          <a href="#" class="nav-link">Resources</a>
+          <a href="#" class="nav-link">Pricing</a>
+        </nav>
+        <div class="header-actions">
+          <a href="#" class="btn btn-ghost">Sign in</a>
+          <a href="#" class="btn btn-primary">Start free trial</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          New: Advanced Analytics Dashboard
+        </div>
+        <h1 class="hero-title">
+          Build better products with <span>powerful insights</span>
+        </h1>
+        <p class="hero-description">
+          Unified analytics platform that helps teams understand user behavior,
+          optimize conversions, and make data-driven decisions faster.
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-primary btn-lg">Start free trial</a>
+          <a href="#" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Watch demo
+          </a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-image-placeholder">Dashboard Preview</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need to grow</h2>
+        <p class="section-description">
+          Powerful tools and integrations designed to help you understand your users and optimize every touchpoint.
+        </p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Real-time Analytics</h3>
+          <p class="feature-description">
+            Track user behavior as it happens with sub-second latency. See exactly what's working and what needs improvement.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20V10"></path>
+              <path d="M18 20V4"></path>
+              <path d="M6 20v-4"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Advanced Reporting</h3>
+          <p class="feature-description">
+            Build custom reports and dashboards without writing code. Share insights with your team automatically.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">User Segmentation</h3>
+          <p class="feature-description">
+            Create dynamic user segments based on behavior, attributes, and engagement patterns.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">A/B Testing</h3>
+          <p class="feature-description">
+            Run experiments at scale with statistical significance. Make confident decisions backed by data.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Funnel Analysis</h3>
+          <p class="feature-description">
+            Visualize user journeys and identify drop-off points. Optimize conversion rates with actionable insights.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <line x1="6" y1="1" x2="6" y2="4"></line>
+              <line x1="10" y1="1" x2="10" y2="4"></line>
+              <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Integrations</h3>
+          <p class="feature-description">
+            Connect with 100+ tools you already use. Sync data bidirectionally with your favorite platforms.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value"><span>10B+</span></div>
+          <div class="stat-label">Events tracked daily</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span>50K+</span></div>
+          <div class="stat-label">Companies worldwide</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span>99.9%</span></div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span>190+</span></div>
+          <div class="stat-label">Countries served</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-description">
+          Start free and scale as you grow. No hidden fees, no surprises.
+        </p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-name">Starter</div>
+            <div class="pricing-price">$0<span>/month</span></div>
+            <div class="pricing-description">For individuals and small projects</div>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Up to 10,000 events/month
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              3 team members
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Basic analytics
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              7-day data retention
+            </li>
+          </ul>
+          <button class="btn btn-secondary pricing-action">Get started</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-header">
+            <div class="pricing-name">Pro</div>
+            <div class="pricing-price">$49<span>/month</span></div>
+            <div class="pricing-description">For growing teams</div>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Up to 1M events/month
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Unlimited team members
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Advanced analytics
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              1-year data retention
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Priority support
+            </li>
+          </ul>
+          <button class="btn btn-primary pricing-action">Start free trial</button>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-name">Enterprise</div>
+            <div class="pricing-price">Custom</div>
+            <div class="pricing-description">For large organizations</div>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Unlimited events
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Custom integrations
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Dedicated support
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              SSO & advanced security
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Custom SLA
+            </li>
+          </ul>
+          <button class="btn btn-secondary pricing-action">Contact sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to get started?</h2>
+        <p class="cta-description">
+          Join thousands of companies using our platform to grow their business.
+        </p>
+        <a href="#" class="btn btn-primary btn-lg">Start your free trial</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">acme</div>
+          <p class="footer-tagline">
+            Powerful analytics for modern teams. Make data-driven decisions with confidence.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <ul class="footer-links">
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Integrations</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">&copy; 2024 Acme Inc. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

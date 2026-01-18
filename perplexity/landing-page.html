@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #1B9B8C;
+      --color-primary-hover: #178A7C;
+      --color-primary-light: #E8F5F3;
+      --bg-page: #FAFAF8;
+      --bg-surface: #FFFFFF;
+      --bg-input: #EEEEE8;
+      --text-primary: #262626;
+      --text-secondary: #525250;
+      --text-muted: #737370;
+      --text-placeholder: #A3A3A0;
+      --border-default: #E5E5E0;
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Times New Roman', Georgia, serif;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 9999px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      height: 64px;
+      padding: 0 24px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .header__logo-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--color-primary);
+    }
+
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .header__nav-item {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .header__nav-item:hover {
+      color: var(--text-primary);
+    }
+
+    .header__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 200ms ease;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn--primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .btn--primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn--secondary {
+      background-color: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+    }
+
+    .btn--secondary:hover {
+      background-color: #F5F5F0;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 120px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background-color: var(--color-primary-light);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-primary);
+      margin-bottom: 24px;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero__subtitle {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      max-width: 680px;
+      margin: 0 auto 32px;
+      padding: 16px 20px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-bar__input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 17px;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .search-bar__input::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    .search-bar__actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--bg-input);
+    }
+
+    .search-bar__icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-bar__icon-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .search-bar__icon-btn:hover {
+      background-color: #F5F5F0;
+    }
+
+    .search-bar__submit {
+      width: 44px;
+      height: 44px;
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-lg);
+      color: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-bar__submit:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    /* Category Chips */
+    .chips {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 150ms ease;
+      text-decoration: none;
+    }
+
+    .chip:hover {
+      background-color: #F5F5F0;
+      border-color: #D4D4D0;
+    }
+
+    .chip__icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 120px 24px;
+      background-color: var(--bg-surface);
+    }
+
+    .features__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features__title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .features__subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .feature-card {
+      padding: 32px;
+      background-color: var(--bg-page);
+      border-radius: var(--radius-xl);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-card__icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--color-primary-light);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+    }
+
+    .feature-card__title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card__description {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 120px 24px;
+      text-align: center;
+    }
+
+    .cta__container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta__title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .cta__subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 64px 24px 32px;
+      background-color: #1A1F1E;
+      color: #FFFFFF;
+    }
+
+    .footer__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 64px;
+      margin-bottom: 64px;
+    }
+
+    .footer__brand {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .footer__brand-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 280px;
+    }
+
+    .footer__column-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .footer__links {
+      list-style: none;
+    }
+
+    .footer__link {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      display: block;
+      padding: 6px 0;
+      transition: color 150ms ease;
+    }
+
+    .footer__link:hover {
+      color: #FFFFFF;
+    }
+
+    .footer__bottom {
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copyright {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: 1024px) {
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero__title {
+        font-size: 48px;
+      }
+
+      .header__nav {
+        display: none;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="#" class="header__logo">
+      <svg class="header__logo-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+      <span>Product</span>
+    </a>
+
+    <nav class="header__nav">
+      <a href="#" class="header__nav-item">Product</a>
+      <a href="#" class="header__nav-item">Solutions</a>
+      <a href="#" class="header__nav-item">Pricing</a>
+      <a href="#" class="header__nav-item">Resources</a>
+    </nav>
+
+    <div class="header__actions">
+      <a href="#" class="btn btn--secondary">Log in</a>
+      <a href="#" class="btn btn--primary">Get started</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <span class="hero__eyebrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      Introducing our new AI features
+    </span>
+
+    <h1 class="hero__title">Where knowledge meets intelligence</h1>
+
+    <p class="hero__subtitle">
+      Get instant, accurate answers with sources you can trust.
+      The most powerful way to explore information and accelerate your research.
+    </p>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" class="search-bar__input" placeholder="Ask anything. Type @ for mentions.">
+      <div class="search-bar__actions">
+        <div class="search-bar__icons">
+          <button class="search-bar__icon-btn" title="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <button class="search-bar__icon-btn" title="Focus">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M1 12h2M21 12h2"/>
+            </svg>
+          </button>
+          <button class="search-bar__icon-btn" title="Attach">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+        </div>
+        <button class="search-bar__submit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Chips -->
+    <div class="chips">
+      <a href="#" class="chip">
+        <span class="chip__icon">&#128200;</span>
+        Compare
+      </a>
+      <a href="#" class="chip">
+        <span class="chip__icon">&#128736;</span>
+        Troubleshoot
+      </a>
+      <a href="#" class="chip">
+        <span class="chip__icon">&#9989;</span>
+        Fact Check
+      </a>
+      <a href="#" class="chip">
+        <span class="chip__icon">&#128269;</span>
+        Analyze
+      </a>
+      <a href="#" class="chip">
+        <span class="chip__icon">&#128203;</span>
+        Plan
+      </a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="features__container">
+      <div class="features__header">
+        <h2 class="features__title">Built for deep understanding</h2>
+        <p class="features__subtitle">
+          Powerful tools designed to help you discover, understand, and share knowledge.
+        </p>
+      </div>
+
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Real-time Search</h3>
+          <p class="feature-card__description">
+            Access up-to-date information from across the web with instant, comprehensive results.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Cited Sources</h3>
+          <p class="feature-card__description">
+            Every answer comes with transparent citations so you can verify and explore further.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Follow-up Questions</h3>
+          <p class="feature-card__description">
+            Dive deeper with natural conversations. Ask follow-ups to refine your understanding.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Organized Spaces</h3>
+          <p class="feature-card__description">
+            Create dedicated spaces for your projects with custom AI instructions and shared context.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Market Insights</h3>
+          <p class="feature-card__description">
+            Track stocks, crypto, and financial news with real-time data and AI-powered analysis.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Scheduled Tasks</h3>
+          <p class="feature-card__description">
+            Automate research with scheduled queries that deliver insights when you need them.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta__container">
+      <h2 class="cta__title">Start exploring today</h2>
+      <p class="cta__subtitle">
+        Join millions of users who trust our platform for accurate, cited answers.
+      </p>
+      <a href="#" class="btn btn--primary" style="padding: 14px 32px; font-size: 16px;">
+        Get started free
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Product</div>
+          <p class="footer__brand-text">
+            The AI-powered answer engine that helps you understand the world.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer__column-title">Product</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Features</a></li>
+            <li><a href="#" class="footer__link">Pricing</a></li>
+            <li><a href="#" class="footer__link">API</a></li>
+            <li><a href="#" class="footer__link">Enterprise</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer__column-title">Company</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">About</a></li>
+            <li><a href="#" class="footer__link">Blog</a></li>
+            <li><a href="#" class="footer__link">Careers</a></li>
+            <li><a href="#" class="footer__link">Press</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer__column-title">Legal</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Privacy Policy</a></li>
+            <li><a href="#" class="footer__link">Terms of Service</a></li>
+            <li><a href="#" class="footer__link">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span class="footer__copyright">&copy; 2024 Product. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

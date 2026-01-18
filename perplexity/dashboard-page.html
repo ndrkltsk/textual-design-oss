@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* CSS Variables - Design Tokens */
+    :root {
+      /* Colors */
+      --color-primary: #1B9B8C;
+      --color-primary-hover: #178A7D;
+      --color-primary-light: rgba(27, 155, 140, 0.1);
+      --color-secondary: #20808A;
+
+      --color-background: #FAFAF8;
+      --color-surface: #FFFFFF;
+      --color-surface-secondary: #F5F5F3;
+      --color-surface-hover: #F0F0EE;
+
+      --color-text-primary: #1A1A1A;
+      --color-text-secondary: #64645F;
+      --color-text-muted: #8E8E89;
+      --color-text-inverse: #FFFFFF;
+
+      --color-border: #E8E8E3;
+      --color-border-light: #EFEFED;
+
+      --color-success: #22C55E;
+      --color-success-bg: rgba(34, 197, 94, 0.1);
+      --color-error: #EF4444;
+      --color-error-bg: rgba(239, 68, 68, 0.1);
+      --color-warning: #F59E0B;
+      --color-info: #3B82F6;
+
+      /* Typography */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Times New Roman', Georgia, serif;
+      --font-mono: 'SF Mono', Monaco, 'Courier New', monospace;
+
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      --line-height-tight: 1.25;
+      --line-height-normal: 1.5;
+      --line-height-relaxed: 1.625;
+
+      /* Spacing */
+      --spacing-1: 0.25rem;
+      --spacing-2: 0.5rem;
+      --spacing-3: 0.75rem;
+      --spacing-4: 1rem;
+      --spacing-5: 1.25rem;
+      --spacing-6: 1.5rem;
+      --spacing-8: 2rem;
+      --spacing-10: 2.5rem;
+      --spacing-12: 3rem;
+      --spacing-16: 4rem;
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-2xl: 24px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 200ms ease;
+      --transition-slow: 300ms ease;
+
+      /* Layout */
+      --sidebar-collapsed: 72px;
+      --sidebar-expanded: 260px;
+      --header-height: 64px;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-normal);
+      color: var(--color-text-primary);
+      background-color: var(--color-background);
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: var(--sidebar-collapsed);
+      background-color: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      transition: width var(--transition-slow);
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .sidebar:hover {
+      width: var(--sidebar-expanded);
+    }
+
+    .sidebar-header {
+      padding: var(--spacing-4);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      border-bottom: 1px solid var(--color-border);
+      min-height: 64px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .logo-text {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .sidebar:hover .logo-text {
+      opacity: 1;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: var(--spacing-2);
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: var(--spacing-4);
+    }
+
+    .nav-section-title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: var(--spacing-2) var(--spacing-3);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .sidebar:hover .nav-section-title {
+      opacity: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-3);
+      border-radius: var(--radius-md);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+
+    .nav-item.active {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-item-text {
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .sidebar:hover .nav-item-text {
+      opacity: 1;
+    }
+
+    .nav-item-badge {
+      margin-left: auto;
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .sidebar:hover .nav-item-badge {
+      opacity: 1;
+    }
+
+    .sidebar-footer {
+      padding: var(--spacing-4);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-2);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+
+    .user-profile:hover {
+      background-color: var(--color-surface-hover);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-sm);
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .sidebar:hover .user-info {
+      opacity: 1;
+    }
+
+    .user-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-plan {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-collapsed);
+      transition: margin-left var(--transition-slow);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      background-color: var(--color-background);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--spacing-4) var(--spacing-6);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-4);
+      z-index: 50;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--spacing-3) var(--spacing-4);
+      padding-left: 44px;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-base);
+      color: var(--color-text-primary);
+      transition: all var(--transition-fast);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+
+    .search-input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: var(--spacing-4);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      width: 20px;
+      height: 20px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+    }
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      border: none;
+      background-color: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-button:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+
+    .icon-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .new-thread-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-2) var(--spacing-4);
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+
+    .new-thread-btn:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .new-thread-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Content Area */
+    .content-area {
+      padding: var(--spacing-6);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: var(--spacing-6);
+    }
+
+    /* Discover Section */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .section-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .section-tabs {
+      display: flex;
+      gap: var(--spacing-1);
+      background-color: var(--color-surface-secondary);
+      padding: var(--spacing-1);
+      border-radius: var(--radius-md);
+    }
+
+    .tab-btn {
+      padding: var(--spacing-2) var(--spacing-3);
+      border: none;
+      background-color: transparent;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .tab-btn:hover {
+      color: var(--color-text-primary);
+    }
+
+    .tab-btn.active {
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Discover Cards */
+    .discover-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-4);
+    }
+
+    .discover-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-4);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .discover-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .discover-card-image {
+      width: 100%;
+      height: 140px;
+      background-color: var(--color-surface-secondary);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-3);
+      overflow: hidden;
+    }
+
+    .discover-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .discover-card-category {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-1);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .discover-card-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-tight);
+      margin-bottom: var(--spacing-2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .discover-card-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    .discover-card-meta span {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-1);
+    }
+
+    .discover-card-meta svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Featured Card */
+    .featured-card {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-4);
+    }
+
+    .featured-card .discover-card-image {
+      height: 200px;
+      margin-bottom: 0;
+    }
+
+    .featured-card-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-card .discover-card-title {
+      font-size: var(--font-size-lg);
+      -webkit-line-clamp: 3;
+    }
+
+    .featured-card-description {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-3);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Sidebar Widgets */
+    .widgets {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+    }
+
+    .widget {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-4);
+    }
+
+    .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-3);
+    }
+
+    .widget-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .widget-action {
+      font-size: var(--font-size-xs);
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .widget-action:hover {
+      text-decoration: underline;
+    }
+
+    /* Weather Widget */
+    .weather-main {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .weather-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--color-warning);
+    }
+
+    .weather-temp {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .weather-condition {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    .weather-location {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    .weather-details {
+      display: flex;
+      gap: var(--spacing-4);
+      padding-top: var(--spacing-3);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .weather-detail {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+
+    .weather-detail-value {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    /* Market Widget */
+    .market-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-3);
+    }
+
+    .market-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .market-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .market-info {
+      text-align: right;
+    }
+
+    .market-price {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .market-change {
+      font-size: var(--font-size-xs);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .market-change.positive {
+      color: var(--color-success);
+    }
+
+    .market-change.negative {
+      color: var(--color-error);
+    }
+
+    .market-change svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Recent Threads Widget */
+    .thread-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-2);
+    }
+
+    .thread-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-3);
+      padding: var(--spacing-2);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+
+    .thread-item:hover {
+      background-color: var(--color-surface-hover);
+    }
+
+    .thread-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background-color: var(--color-surface-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .thread-icon svg {
+      width: 16px;
+      height: 16px;
+      color: var(--color-text-secondary);
+    }
+
+    .thread-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .thread-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .thread-time {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* Trending Topics Widget */
+    .topic-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-2);
+    }
+
+    .topic-tag {
+      padding: var(--spacing-2) var(--spacing-3);
+      background-color: var(--color-surface-secondary);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .topic-tag:hover {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+
+    /* Pro Banner */
+    .pro-banner {
+      background: linear-gradient(135deg, #1B9B8C 0%, #20808A 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-4);
+      color: white;
+    }
+
+    .pro-banner-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .pro-banner-description {
+      font-size: var(--font-size-sm);
+      opacity: 0.9;
+      margin-bottom: var(--spacing-3);
+    }
+
+    .pro-banner-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-2) var(--spacing-4);
+      background-color: white;
+      color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+
+    .pro-banner-btn:hover {
+      transform: scale(1.02);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .widgets {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 0;
+        transform: translateX(-100%);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .discover-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-card {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+      }
+
+      .widgets {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: var(--spacing-3) var(--spacing-4);
+      }
+
+      .content-area {
+        padding: var(--spacing-4);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+        </div>
+        <span class="logo-text">Dashboard</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="#" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <polyline points="9,22 9,12 15,12 15,22"/>
+            </svg>
+            <span class="nav-item-text">Home</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <span class="nav-item-text">Search</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="10,8 16,12 10,16 10,8"/>
+            </svg>
+            <span class="nav-item-text">Discover</span>
+            <span class="nav-item-badge">New</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+            <span class="nav-item-text">Threads</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Spaces</div>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+            </svg>
+            <span class="nav-item-text">Work Projects</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+            </svg>
+            <span class="nav-item-text">Research</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="12" y1="8" x2="12" y2="16"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            <span class="nav-item-text">Create Space</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Library</div>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+            </svg>
+            <span class="nav-item-text">Collections</span>
+          </a>
+          <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+            <span class="nav-item-text">History</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">JD</div>
+          <div class="user-info">
+            <div class="user-name">John Doe</div>
+            <div class="user-plan">Pro Plan</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="search-bar">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input type="text" class="search-input" placeholder="Ask anything...">
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" title="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+          </button>
+          <button class="icon-button" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </button>
+          <button class="new-thread-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            New Thread
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        <div class="content-grid">
+          <!-- Discover Section -->
+          <section class="discover-section">
+            <div class="section-header">
+              <h2 class="section-title">Discover</h2>
+              <div class="section-tabs">
+                <button class="tab-btn active">For You</button>
+                <button class="tab-btn">Top</button>
+                <button class="tab-btn">Tech</button>
+                <button class="tab-btn">Finance</button>
+              </div>
+            </div>
+
+            <div class="discover-grid">
+              <!-- Featured Card -->
+              <div class="discover-card featured-card">
+                <div class="discover-card-image">
+                  <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop" alt="Technology">
+                </div>
+                <div class="featured-card-content">
+                  <span class="discover-card-category">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    Trending
+                  </span>
+                  <h3 class="discover-card-title">The Future of AI: How Machine Learning is Transforming Every Industry</h3>
+                  <p class="featured-card-description">Explore how artificial intelligence and machine learning are revolutionizing healthcare, finance, transportation, and more.</p>
+                  <div class="discover-card-meta">
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                      </svg>
+                      5 min read
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                      2.4k views
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Regular Cards -->
+              <div class="discover-card">
+                <div class="discover-card-image">
+                  <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=280&fit=crop" alt="Stock Market">
+                </div>
+                <span class="discover-card-category">Finance</span>
+                <h3 class="discover-card-title">Markets Rally as Fed Signals Pause in Rate Hikes</h3>
+                <div class="discover-card-meta">
+                  <span>3 min read</span>
+                  <span>1.2k views</span>
+                </div>
+              </div>
+
+              <div class="discover-card">
+                <div class="discover-card-image">
+                  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=280&fit=crop" alt="Cybersecurity">
+                </div>
+                <span class="discover-card-category">Technology</span>
+                <h3 class="discover-card-title">New Cybersecurity Threats to Watch in 2025</h3>
+                <div class="discover-card-meta">
+                  <span>4 min read</span>
+                  <span>890 views</span>
+                </div>
+              </div>
+
+              <div class="discover-card">
+                <div class="discover-card-image">
+                  <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=280&fit=crop" alt="Space">
+                </div>
+                <span class="discover-card-category">Science</span>
+                <h3 class="discover-card-title">NASA Announces New Mars Mission Timeline</h3>
+                <div class="discover-card-meta">
+                  <span>6 min read</span>
+                  <span>3.1k views</span>
+                </div>
+              </div>
+
+              <div class="discover-card">
+                <div class="discover-card-image">
+                  <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=280&fit=crop" alt="Health">
+                </div>
+                <span class="discover-card-category">Health</span>
+                <h3 class="discover-card-title">Breakthrough in Cancer Research Shows Promise</h3>
+                <div class="discover-card-meta">
+                  <span>5 min read</span>
+                  <span>1.8k views</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Widgets Sidebar -->
+          <aside class="widgets">
+            <!-- Weather Widget -->
+            <div class="widget">
+              <div class="widget-header">
+                <h3 class="widget-title">Weather</h3>
+                <a href="#" class="widget-action">Details</a>
+              </div>
+              <div class="weather-main">
+                <svg class="weather-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                  <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+                  <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+                  <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <div>
+                  <div class="weather-temp">72°F</div>
+                  <div class="weather-condition">Sunny</div>
+                </div>
+              </div>
+              <div class="weather-location">San Francisco, CA</div>
+              <div class="weather-details">
+                <div class="weather-detail">
+                  Humidity: <span class="weather-detail-value">45%</span>
+                </div>
+                <div class="weather-detail">
+                  Wind: <span class="weather-detail-value">8 mph</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Market Widget -->
+            <div class="widget">
+              <div class="widget-header">
+                <h3 class="widget-title">Markets</h3>
+                <a href="#" class="widget-action">View All</a>
+              </div>
+              <div class="market-list">
+                <div class="market-item">
+                  <span class="market-name">S&P 500</span>
+                  <div class="market-info">
+                    <div class="market-price">4,783.45</div>
+                    <div class="market-change positive">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18,15 12,9 6,15"/>
+                      </svg>
+                      +1.23%
+                    </div>
+                  </div>
+                </div>
+                <div class="market-item">
+                  <span class="market-name">NASDAQ</span>
+                  <div class="market-info">
+                    <div class="market-price">15,074.12</div>
+                    <div class="market-change positive">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18,15 12,9 6,15"/>
+                      </svg>
+                      +0.89%
+                    </div>
+                  </div>
+                </div>
+                <div class="market-item">
+                  <span class="market-name">BTC/USD</span>
+                  <div class="market-info">
+                    <div class="market-price">43,521.00</div>
+                    <div class="market-change negative">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 12,15 18,9"/>
+                      </svg>
+                      -2.15%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Threads Widget -->
+            <div class="widget">
+              <div class="widget-header">
+                <h3 class="widget-title">Recent Threads</h3>
+                <a href="#" class="widget-action">See All</a>
+              </div>
+              <div class="thread-list">
+                <div class="thread-item">
+                  <div class="thread-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="16,18 22,12 16,6"/>
+                      <polyline points="8,6 2,12 8,18"/>
+                    </svg>
+                  </div>
+                  <div class="thread-content">
+                    <div class="thread-title">How to implement React hooks</div>
+                    <div class="thread-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="thread-item">
+                  <div class="thread-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="3" y1="9" x2="21" y2="9"/>
+                      <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                  </div>
+                  <div class="thread-content">
+                    <div class="thread-title">Best productivity apps for 2025</div>
+                    <div class="thread-time">5 hours ago</div>
+                  </div>
+                </div>
+                <div class="thread-item">
+                  <div class="thread-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5"/>
+                      <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                  </div>
+                  <div class="thread-content">
+                    <div class="thread-title">Understanding neural networks</div>
+                    <div class="thread-time">Yesterday</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Topics -->
+            <div class="widget">
+              <div class="widget-header">
+                <h3 class="widget-title">Trending Topics</h3>
+              </div>
+              <div class="topic-list">
+                <span class="topic-tag">AI Ethics</span>
+                <span class="topic-tag">Climate Change</span>
+                <span class="topic-tag">Quantum Computing</span>
+                <span class="topic-tag">Space Exploration</span>
+                <span class="topic-tag">Renewable Energy</span>
+                <span class="topic-tag">Blockchain</span>
+              </div>
+            </div>
+
+            <!-- Pro Banner -->
+            <div class="pro-banner">
+              <h3 class="pro-banner-title">Upgrade to Pro</h3>
+              <p class="pro-banner-description">Get unlimited searches, advanced AI models, and priority support.</p>
+              <button class="pro-banner-btn">
+                Learn More
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12,5 19,12 12,19"/>
+                </svg>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

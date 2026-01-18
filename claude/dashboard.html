@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      /* Colors - Light Theme */
+      --color-primary: #CC785C;
+      --color-primary-hover: #B86A50;
+      --color-accent-purple: #6B5B95;
+      --color-accent-teal: #4A9B8C;
+      --color-accent-blue: #4A90A4;
+      --color-warning: #D4A84B;
+      --color-error: #C75050;
+      --color-success: #4A9B8C;
+
+      --color-bg-primary: #F5F5F0;
+      --color-bg-secondary: #EDEEE8;
+      --color-bg-tertiary: #E8E8E2;
+      --color-bg-card: #FFFFFF;
+      --color-bg-input: #FFFFFF;
+
+      --color-text-primary: #1A1A1A;
+      --color-text-secondary: #4A4A4A;
+      --color-text-tertiary: #6B6B6B;
+      --color-text-muted: #8B8B8B;
+      --color-text-inverse: #FFFFFF;
+
+      --color-border-primary: #D4D4CE;
+      --color-border-secondary: #E0E0DA;
+      --color-border-input: #C8C8C2;
+
+      /* Typography */
+      --font-family-display: 'Georgia', serif;
+      --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing */
+      --spacing-1: 4px;
+      --spacing-2: 8px;
+      --spacing-3: 12px;
+      --spacing-4: 16px;
+      --spacing-5: 20px;
+      --spacing-6: 24px;
+      --spacing-8: 32px;
+      --spacing-12: 48px;
+
+      /* Borders */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 2px 4px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 8px rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.08);
+
+      /* Motion */
+      --duration-fast: 100ms;
+      --duration-normal: 200ms;
+      --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* Layout */
+      --sidebar-width: 280px;
+      --header-height: 56px;
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family-body);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-primary);
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--color-bg-secondary);
+      border-right: 1px solid var(--color-border-secondary);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 50;
+    }
+
+    .sidebar-header {
+      height: var(--header-height);
+      padding: 0 var(--spacing-4);
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      font-family: var(--font-family-display);
+      font-size: 18px;
+      color: var(--color-text-primary);
+      text-decoration: none;
+    }
+
+    .sidebar-logo svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-primary);
+    }
+
+    .sidebar-content {
+      flex: 1;
+      padding: var(--spacing-4);
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      margin-bottom: var(--spacing-6);
+    }
+
+    .sidebar-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: var(--spacing-2) var(--spacing-3);
+      margin-bottom: var(--spacing-1);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav-item {
+      margin-bottom: var(--spacing-1);
+    }
+
+    .sidebar-nav-link {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-2) var(--spacing-3);
+      border-radius: var(--radius-md);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .sidebar-nav-link:hover {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .sidebar-nav-link.active {
+      background-color: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+
+    .sidebar-nav-link svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: var(--spacing-4);
+      border-top: 1px solid var(--color-border-secondary);
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-2);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color var(--duration-normal);
+    }
+
+    .user-menu:hover {
+      background-color: var(--color-bg-tertiary);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--color-text-secondary);
+      color: var(--color-text-inverse);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-plan {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      height: var(--header-height);
+      padding: 0 var(--spacing-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--color-bg-primary);
+      border-bottom: 1px solid var(--color-border-secondary);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-title {
+      font-family: var(--font-family-display);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-2);
+      height: 36px;
+      padding: 8px 16px;
+      font-family: var(--font-family-body);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-border-primary);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: transparent;
+      color: var(--color-text-secondary);
+      border-radius: var(--radius-md);
+    }
+
+    .btn-icon:hover {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      padding: var(--spacing-6);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-4);
+      margin-bottom: var(--spacing-6);
+    }
+
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-card {
+      background-color: var(--color-bg-card);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-5);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-3);
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon.teal {
+      background-color: rgba(74, 155, 140, 0.1);
+      color: var(--color-accent-teal);
+    }
+
+    .stat-icon.purple {
+      background-color: rgba(107, 91, 149, 0.1);
+      color: var(--color-accent-purple);
+    }
+
+    .stat-icon.blue {
+      background-color: rgba(74, 144, 164, 0.1);
+      color: var(--color-accent-blue);
+    }
+
+    .stat-icon.primary {
+      background-color: rgba(204, 120, 92, 0.1);
+      color: var(--color-primary);
+    }
+
+    .stat-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .stat-change {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-change.positive {
+      background-color: rgba(74, 155, 140, 0.1);
+      color: var(--color-success);
+    }
+
+    .stat-change.negative {
+      background-color: rgba(199, 80, 80, 0.1);
+      color: var(--color-error);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-1);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Section */
+    .section {
+      background-color: var(--color-bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-4) var(--spacing-5);
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .section-content {
+      padding: var(--spacing-5);
+    }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: var(--spacing-3) var(--spacing-4);
+      text-align: left;
+    }
+
+    .table th {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: var(--color-bg-secondary);
+    }
+
+    .table th:first-child {
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    .table th:last-child {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .table td {
+      font-size: 14px;
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table tr:hover td {
+      background-color: var(--color-bg-secondary);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-success {
+      background-color: rgba(74, 155, 140, 0.1);
+      color: var(--color-success);
+    }
+
+    .badge-warning {
+      background-color: rgba(212, 168, 75, 0.1);
+      color: var(--color-warning);
+    }
+
+    .badge-error {
+      background-color: rgba(199, 80, 80, 0.1);
+      color: var(--color-error);
+    }
+
+    .badge-neutral {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-secondary);
+    }
+
+    /* Activity List */
+    .activity-list {
+      list-style: none;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: var(--spacing-3);
+      padding: var(--spacing-3) 0;
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .activity-icon.teal {
+      background-color: rgba(74, 155, 140, 0.1);
+      color: var(--color-accent-teal);
+    }
+
+    .activity-icon.purple {
+      background-color: rgba(107, 91, 149, 0.1);
+      color: var(--color-accent-purple);
+    }
+
+    .activity-icon.blue {
+      background-color: rgba(74, 144, 164, 0.1);
+      color: var(--color-accent-blue);
+    }
+
+    .activity-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-text {
+      font-size: 14px;
+      color: var(--color-text-primary);
+      margin-bottom: 2px;
+    }
+
+    .activity-text strong {
+      font-weight: 600;
+    }
+
+    .activity-time {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Two Column Layout */
+    .two-columns {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--spacing-6);
+    }
+
+    @media (max-width: 1024px) {
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-3);
+    }
+
+    .quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-4);
+      background-color: var(--color-bg-secondary);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--color-text-primary);
+      transition: all var(--duration-normal);
+    }
+
+    .quick-action:hover {
+      background-color: var(--color-bg-tertiary);
+    }
+
+    .quick-action svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-primary);
+    }
+
+    .quick-action span {
+      font-size: 13px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="landing-page.html" class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          ProductName
+        </a>
+      </div>
+
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <nav class="sidebar-nav">
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                Dashboard
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+                Projects
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Team
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                Analytics
+              </a>
+            </li>
+          </nav>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Workspace</div>
+          <nav class="sidebar-nav">
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Messages
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Calendar
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Settings
+              </a>
+            </li>
+          </nav>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-menu">
+          <div class="user-avatar">RS</div>
+          <div class="user-info">
+            <div class="user-name">Robert Smith</div>
+            <div class="user-plan">Pro plan</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6,9 12,15 18,9"/>
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <h1 class="header-title">Dashboard</h1>
+        <div class="header-actions">
+          <button class="btn btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <button class="btn btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            New Project
+          </button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+              </div>
+              <span class="stat-change positive">+12%</span>
+            </div>
+            <div class="stat-value">24</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <span class="stat-change positive">+8%</span>
+            </div>
+            <div class="stat-value">156</div>
+            <div class="stat-label">Team Members</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                </svg>
+              </div>
+              <span class="stat-change negative">-3%</span>
+            </div>
+            <div class="stat-value">89%</div>
+            <div class="stat-label">Completion Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12,6 12,12 16,14"/>
+                </svg>
+              </div>
+              <span class="stat-change positive">+24%</span>
+            </div>
+            <div class="stat-value">1,284</div>
+            <div class="stat-label">Hours Tracked</div>
+          </div>
+        </div>
+
+        <div class="two-columns">
+          <!-- Recent Projects Table -->
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">Recent Projects</h2>
+              <a href="#" class="btn btn-secondary">View All</a>
+            </div>
+            <div class="section-content" style="padding: 0;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Status</th>
+                    <th>Team</th>
+                    <th>Progress</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Website Redesign</strong></td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td>5 members</td>
+                    <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mobile App v2.0</strong></td>
+                    <td><span class="badge badge-warning">In Review</span></td>
+                    <td>8 members</td>
+                    <td>92%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>API Integration</strong></td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td>3 members</td>
+                    <td>45%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dashboard Analytics</strong></td>
+                    <td><span class="badge badge-neutral">Planned</span></td>
+                    <td>4 members</td>
+                    <td>0%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>User Research</strong></td>
+                    <td><span class="badge badge-error">On Hold</span></td>
+                    <td>2 members</td>
+                    <td>30%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div>
+            <!-- Quick Actions -->
+            <div class="section">
+              <div class="section-header">
+                <h2 class="section-title">Quick Actions</h2>
+              </div>
+              <div class="section-content">
+                <div class="quick-actions">
+                  <a href="#" class="quick-action">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    <span>New Project</span>
+                  </a>
+                  <a href="#" class="quick-action">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="8.5" cy="7" r="4"/>
+                      <line x1="20" y1="8" x2="20" y2="14"/>
+                      <line x1="23" y1="11" x2="17" y2="11"/>
+                    </svg>
+                    <span>Invite Member</span>
+                  </a>
+                  <a href="#" class="quick-action">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="17,8 12,3 7,8"/>
+                      <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <span>Upload Files</span>
+                  </a>
+                  <a href="#" class="quick-action">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    <span>View Reports</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section">
+              <div class="section-header">
+                <h2 class="section-title">Recent Activity</h2>
+              </div>
+              <div class="section-content">
+                <ul class="activity-list">
+                  <li class="activity-item">
+                    <div class="activity-icon teal">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20,6 9,17 4,12"/>
+                      </svg>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-text"><strong>Sarah</strong> completed task "Design review"</div>
+                      <div class="activity-time">2 minutes ago</div>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon purple">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <line x1="20" y1="8" x2="20" y2="14"/>
+                        <line x1="23" y1="11" x2="17" y2="11"/>
+                      </svg>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-text"><strong>Alex</strong> joined the team</div>
+                      <div class="activity-time">1 hour ago</div>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon blue">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-text"><strong>Mike</strong> commented on "Mobile App"</div>
+                      <div class="activity-time">3 hours ago</div>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon teal">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-text"><strong>You</strong> created "Dashboard Analytics"</div>
+                      <div class="activity-time">Yesterday</div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grow Your Business | Marketing Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Custom Properties from Design System */
+    :root {
+      --color-primary-yellow: #FFE01B;
+      --color-primary-dark: #241C15;
+      --color-primary-teal: #007C89;
+      --color-bg-cream: #FFFDF5;
+      --color-bg-white: #FFFFFF;
+      --color-bg-light: #F5F5F5;
+      --color-bg-pink: #F2D2E1;
+      --color-bg-blue: #D1E3E8;
+      --color-text-primary: #241C15;
+      --color-text-secondary: #616161;
+      --color-text-muted: #9E9E9E;
+      --color-text-inverse: #FFFFFF;
+      --color-border: #E0E0E0;
+      --font-serif: 'Lora', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, sans-serif;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.1);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 9999px;
+      --transition-normal: 200ms ease-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-cream);
+    }
+
+    /* Announcement Banner */
+    .announcement-banner {
+      background-color: var(--color-primary-dark);
+      color: var(--color-text-inverse);
+      padding: 12px 24px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .announcement-banner a {
+      color: var(--color-primary-yellow);
+      text-decoration: underline;
+    }
+
+    /* Header */
+    .header {
+      background-color: var(--color-bg-white);
+      padding: 0 48px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--color-primary-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color var(--transition-normal);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary-teal);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary-yellow);
+      color: var(--color-primary-dark);
+    }
+
+    .btn-primary:hover {
+      background-color: #E6C900;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--color-primary-dark);
+      border: 1px solid var(--color-primary-dark);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(36, 28, 21, 0.04);
+    }
+
+    .btn-teal {
+      background-color: var(--color-primary-teal);
+      color: var(--color-text-inverse);
+    }
+
+    .btn-teal:hover {
+      background-color: #006670;
+    }
+
+    /* Hero Section */
+    .hero {
+      background-color: var(--color-primary-yellow);
+      padding: 96px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .hero-content h1 {
+      font-family: var(--font-serif);
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--color-text-primary);
+      margin-bottom: 32px;
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .hero-image {
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-image-placeholder {
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 4/3;
+      background-color: var(--color-bg-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 96px 48px;
+      background-color: var(--color-bg-white);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .section-header h2 {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 18px;
+      color: var(--color-text-secondary);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background-color: var(--color-bg-light);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--color-primary-teal);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: white;
+      font-size: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Testimonial Section */
+    .testimonial {
+      background-color: var(--color-bg-pink);
+      padding: 96px 48px;
+    }
+
+    .testimonial-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .testimonial-quote {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 56px;
+      height: 56px;
+      background-color: var(--color-primary-teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .testimonial-info {
+      text-align: left;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .testimonial-title {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    /* Pricing Section */
+    .pricing {
+      padding: 96px 48px;
+      background-color: var(--color-bg-cream);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background-color: var(--color-bg-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--color-primary-teal);
+      position: relative;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--color-primary-teal);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .pricing-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+    }
+
+    .pricing-description {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .pricing-features li {
+      padding: 8px 0;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pricing-features li::before {
+      content: "✓";
+      color: var(--color-primary-teal);
+      font-weight: bold;
+    }
+
+    /* CTA Section */
+    .cta {
+      background-color: var(--color-primary-dark);
+      padding: 96px 48px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--color-text-inverse);
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 32px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--color-primary-dark);
+      padding: 64px 48px 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto 48px;
+    }
+
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-column h4 {
+      color: var(--color-text-inverse);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 8px;
+    }
+
+    .footer-column a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color var(--transition-normal);
+    }
+
+    .footer-column a:hover {
+      color: var(--color-text-inverse);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+    }
+
+    /* Chat Widget */
+    .chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background-color: var(--color-primary-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: transform var(--transition-normal);
+    }
+
+    .chat-widget:hover {
+      transform: scale(1.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 0 24px;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 64px 24px;
+      }
+
+      .hero-content h1 {
+        font-size: 40px;
+      }
+
+      .features {
+        padding: 64px 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonial {
+        padding: 64px 24px;
+      }
+
+      .testimonial-quote {
+        font-size: 24px;
+      }
+
+      .pricing {
+        padding: 64px 24px;
+      }
+
+      .cta {
+        padding: 64px 24px;
+      }
+
+      .cta h2 {
+        font-size: 32px;
+      }
+
+      .footer {
+        padding: 48px 24px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Announcement Banner -->
+  <div class="announcement-banner">
+    Start your free trial today! Get 30 days of premium features. <a href="#">Learn more</a>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="#" class="logo">
+      <span class="logo-icon">M</span>
+      MarketPro
+    </a>
+    <nav class="nav">
+      <a href="#" class="nav-link">Solutions <span>▾</span></a>
+      <a href="#" class="nav-link">Resources <span>▾</span></a>
+      <a href="#" class="nav-link">Pricing</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="#" class="btn btn-primary">Sign Up Free</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Turn emails into revenue</h1>
+      <p>Win new customers with the #1 email marketing and automation platform that recommends ways to get more opens, clicks, and sales.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-primary" style="background-color: var(--color-primary-dark); color: white;">Start Free Trial</a>
+        <a href="#" class="btn btn-secondary">See Plans</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="hero-image-placeholder">
+        [Email Dashboard Preview]
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="section-header">
+      <h2>Everything you need to grow</h2>
+      <p>Powerful tools to help you reach, engage, and convert your audience into loyal customers.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✉</div>
+        <h3>Email Marketing</h3>
+        <p>Create beautiful, personalized emails that drive engagement and conversions with our drag-and-drop builder.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Marketing Automation</h3>
+        <p>Set up automated customer journeys that send the right message at the right time, every time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Analytics & Reporting</h3>
+        <p>Get actionable insights into your campaigns with detailed reports and AI-powered recommendations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Audience Management</h3>
+        <p>Segment your audience and deliver personalized content based on behavior and preferences.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Landing Pages</h3>
+        <p>Build high-converting landing pages in minutes without any design or coding skills required.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>300+ Integrations</h3>
+        <p>Connect your favorite tools and sync your data seamlessly across your entire marketing stack.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="testimonial">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"This platform transformed how we connect with our customers. Our email open rates increased by 47% in just three months."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">SJ</div>
+        <div class="testimonial-info">
+          <p class="testimonial-name">Sarah Johnson</p>
+          <p class="testimonial-title">Marketing Director, TechStartup Inc.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing">
+    <div class="section-header">
+      <h2>Simple, transparent pricing</h2>
+      <p>Choose the plan that's right for your business. All plans include a 30-day free trial.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <p class="pricing-name">Essentials</p>
+        <p class="pricing-price">$13<span>/month</span></p>
+        <p class="pricing-description">For growing businesses</p>
+        <ul class="pricing-features">
+          <li>Up to 500 contacts</li>
+          <li>Email templates</li>
+          <li>Basic automation</li>
+          <li>24/7 email support</li>
+        </ul>
+        <a href="#" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <span class="pricing-badge">Popular</span>
+        <p class="pricing-name">Standard</p>
+        <p class="pricing-price">$20<span>/month</span></p>
+        <p class="pricing-description">For scaling teams</p>
+        <ul class="pricing-features">
+          <li>Up to 2,500 contacts</li>
+          <li>Advanced templates</li>
+          <li>Customer journeys</li>
+          <li>A/B testing</li>
+          <li>Phone support</li>
+        </ul>
+        <a href="#" class="btn btn-teal" style="width: 100%;">Get Started</a>
+      </div>
+      <div class="pricing-card">
+        <p class="pricing-name">Premium</p>
+        <p class="pricing-price">$350<span>/month</span></p>
+        <p class="pricing-description">For large enterprises</p>
+        <ul class="pricing-features">
+          <li>Unlimited contacts</li>
+          <li>Advanced segmentation</li>
+          <li>Multivariate testing</li>
+          <li>Dedicated account manager</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2>Ready to get started?</h2>
+    <p>Join over 12 million businesses that use our platform to reach their customers.</p>
+    <a href="#" class="btn btn-primary">Start Your Free Trial</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="color: white;">
+          <span class="logo-icon">M</span>
+          MarketPro
+        </a>
+        <p>The all-in-one marketing platform for growing businesses. Reach more customers and drive more sales.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">API</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Webinars</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 MarketPro. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Chat Widget -->
+  <div class="chat-widget" title="Chat with us">
+    💬
+  </div>
+</body>
+</html>

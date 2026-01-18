@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in - ChatGPT</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      /* Colors - Light Mode */
+      --primary-black: #000000;
+      --primary-white: #ffffff;
+      --accent-green: #10A37F;
+      --accent-purple: #5865F2;
+
+      --bg-primary: #ffffff;
+      --bg-secondary: #f4f4f4;
+      --bg-tertiary: #ececec;
+      --bg-elevated: #ffffff;
+      --bg-input: #f4f4f4;
+
+      --text-primary: #0d0d0d;
+      --text-secondary: #666666;
+      --text-tertiary: #999999;
+      --text-link: #0066cc;
+
+      --border-default: #e5e5e5;
+      --border-subtle: #f0f0f0;
+      --border-focus: #000000;
+
+      --error: #EF4444;
+
+      /* Typography */
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+
+      /* Effects */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+
+      /* Animation */
+      --duration-normal: 200ms;
+      --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #212121;
+        --bg-secondary: #2f2f2f;
+        --bg-tertiary: #424242;
+        --bg-elevated: #2f2f2f;
+        --bg-input: #303030;
+
+        --text-primary: #ececec;
+        --text-secondary: #b4b4b4;
+        --text-tertiary: #8e8e8e;
+        --text-link: #6eb5ff;
+
+        --border-default: #424242;
+        --border-subtle: #333333;
+        --border-focus: #ffffff;
+      }
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Main Container */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      padding: var(--space-8);
+    }
+
+    /* Logo */
+    .login-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--space-8);
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-black);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .logo {
+        background: var(--primary-white);
+      }
+      .logo svg {
+        fill: var(--primary-black);
+      }
+    }
+
+    .logo svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--primary-white);
+    }
+
+    /* Title */
+    .login-title {
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: var(--space-2);
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+
+    /* Form */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    /* Input Group */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .input-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .input-field {
+      height: 44px;
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-default);
+      background: var(--bg-input);
+      font-size: 16px;
+      font-family: var(--font-primary);
+      color: var(--text-primary);
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      background: var(--bg-primary);
+    }
+
+    .input-field.error {
+      border-color: var(--error);
+    }
+
+    .input-error {
+      font-size: 12px;
+      color: var(--error);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .input-error svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--error);
+    }
+
+    /* Password field with toggle */
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper .input-field {
+      padding-right: 44px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-tertiary);
+    }
+
+    .password-toggle:hover svg {
+      fill: var(--text-secondary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-primary);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-full);
+      padding: 12px 24px;
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+      text-decoration: none;
+      height: 44px;
+    }
+
+    .btn-primary {
+      background: var(--primary-black);
+      color: var(--primary-white);
+      width: 100%;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .btn-primary {
+        background: var(--primary-white);
+        color: var(--primary-black);
+      }
+      .btn-primary:hover {
+        background: #e5e5e5;
+      }
+    }
+
+    .btn-primary:hover {
+      background: #333333;
+    }
+
+    .btn-primary:disabled {
+      background: var(--bg-tertiary);
+      color: var(--text-tertiary);
+      cursor: not-allowed;
+    }
+
+    .btn-social {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      width: 100%;
+    }
+
+    .btn-social:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .btn-social svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-default);
+    }
+
+    .divider-text {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Forgot password link */
+    .forgot-link {
+      font-size: 14px;
+      color: var(--text-link);
+      text-decoration: none;
+      text-align: right;
+      display: block;
+      margin-top: calc(var(--space-2) * -1);
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Sign up link */
+    .signup-link {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: var(--space-6);
+    }
+
+    .signup-link a {
+      color: var(--text-link);
+      text-decoration: none;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    .login-footer {
+      padding: var(--space-6) var(--space-4);
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-secondary);
+    }
+
+    /* Terms notice */
+    .terms-notice {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: var(--space-6);
+      line-height: 1.6;
+    }
+
+    .terms-notice a {
+      color: var(--text-link);
+      text-decoration: none;
+    }
+
+    .terms-notice a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-default);
+      border-top-color: var(--text-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+    }
+
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border-default);
+      appearance: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .checkbox:checked {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z'/%3E%3C/svg%3E");
+      background-size: 12px;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Back link */
+    .back-link {
+      position: absolute;
+      top: var(--space-4);
+      left: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    .back-link svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+  <a href="landing-page.html" class="back-link">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    Back
+  </a>
+
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Logo -->
+      <div class="login-logo">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.6 8.3829l2.02-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="login-title">Welcome back</h1>
+      <p class="login-subtitle">Log in to your ChatGPT account</p>
+
+      <!-- Social Login Buttons -->
+      <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+        <button class="btn btn-social">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <button class="btn btn-social">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentColor"/>
+          </svg>
+          Continue with GitHub
+        </button>
+
+        <button class="btn btn-social">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="currentColor"/>
+          </svg>
+          Continue with Apple
+        </button>
+
+        <button class="btn btn-social">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#EA4335"/>
+          </svg>
+          Continue with Microsoft
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Email Form -->
+      <form class="login-form" onsubmit="event.preventDefault();">
+        <div class="input-group">
+          <label class="input-label" for="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            class="input-field"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="password">Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="input-field"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+            <button type="button" class="password-toggle" onclick="togglePassword()">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="eye-icon">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <a href="#" class="forgot-link">Forgot password?</a>
+
+        <div class="checkbox-group">
+          <input type="checkbox" class="checkbox" id="remember" />
+          <label for="remember" class="checkbox-label">Stay logged in for 30 days</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Continue</button>
+      </form>
+
+      <!-- Sign up link -->
+      <p class="signup-link">
+        Don't have an account? <a href="#">Sign up</a>
+      </p>
+
+      <!-- Terms notice -->
+      <p class="terms-notice">
+        By continuing, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="login-footer">
+    <div class="footer-links">
+      <a href="#">Terms of use</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Help</a>
+    </div>
+  </footer>
+
+  <script>
+    function togglePassword() {
+      const passwordField = document.getElementById('password');
+      const eyeIcon = document.getElementById('eye-icon');
+
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        `;
+      } else {
+        passwordField.type = 'password';
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

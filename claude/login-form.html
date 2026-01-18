@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      /* Colors - Light Theme */
+      --color-primary: #CC785C;
+      --color-primary-hover: #B86A50;
+      --color-accent-purple: #6B5B95;
+      --color-accent-teal: #4A9B8C;
+      --color-accent-blue: #4A90A4;
+      --color-error: #C75050;
+      --color-error-bg: #FDF2F2;
+
+      --color-bg-primary: #F5F5F0;
+      --color-bg-secondary: #EDEEE8;
+      --color-bg-tertiary: #E8E8E2;
+      --color-bg-card: #FFFFFF;
+      --color-bg-input: #FFFFFF;
+
+      --color-text-primary: #1A1A1A;
+      --color-text-secondary: #4A4A4A;
+      --color-text-tertiary: #6B6B6B;
+      --color-text-muted: #8B8B8B;
+      --color-text-inverse: #FFFFFF;
+
+      --color-border-primary: #D4D4CE;
+      --color-border-input: #C8C8C2;
+      --color-border-focus: #CC785C;
+
+      /* Typography */
+      --font-family-display: 'Georgia', serif;
+      --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing */
+      --spacing-1: 4px;
+      --spacing-2: 8px;
+      --spacing-3: 12px;
+      --spacing-4: 16px;
+      --spacing-6: 24px;
+      --spacing-8: 32px;
+      --spacing-12: 48px;
+
+      /* Borders */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      /* Shadows */
+      --shadow-md: 0 2px 4px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.06);
+      --shadow-focus: 0 0 0 3px rgba(204, 120, 92, 0.3);
+
+      /* Motion */
+      --duration-normal: 200ms;
+      --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family-body);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-6);
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      font-family: var(--font-family-display);
+      font-size: 24px;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      margin-bottom: var(--spacing-8);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--color-primary);
+    }
+
+    /* Card */
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--color-bg-card);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-8);
+      box-shadow: var(--shadow-md);
+    }
+
+    .login-title {
+      font-family: var(--font-family-display);
+      font-size: 24px;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: var(--spacing-6);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: var(--spacing-4);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-1);
+    }
+
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 12px 16px;
+      font-family: var(--font-family-body);
+      font-size: 15px;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-input);
+      border: 1px solid var(--color-border-input);
+      border-radius: var(--radius-md);
+      transition: border-color var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) var(--ease-default);
+    }
+
+    .form-input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .form-input:hover {
+      border-color: #A0A09A;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--color-border-focus);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .form-input.error {
+      border-color: var(--color-error);
+    }
+
+    .form-error {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-1);
+      font-size: 13px;
+      color: var(--color-error);
+      margin-top: var(--spacing-1);
+    }
+
+    .form-helper {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+      margin-top: var(--spacing-1);
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .checkbox-input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--color-accent-teal);
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+    }
+
+    /* Links */
+    .form-link {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color var(--duration-normal);
+    }
+
+    .form-link:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      margin-bottom: var(--spacing-6);
+    }
+
+    /* Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-2);
+      width: 100%;
+      height: 44px;
+      padding: 12px 20px;
+      font-family: var(--font-family-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-primary:disabled {
+      background-color: #D9A694;
+      cursor: not-allowed;
+    }
+
+    .btn-social {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .btn-social:hover {
+      background-color: var(--color-border-primary);
+    }
+
+    .btn-social svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-4);
+      margin: var(--spacing-6) 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--color-border-primary);
+    }
+
+    .divider-text {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Footer */
+    .login-footer {
+      text-align: center;
+      margin-top: var(--spacing-6);
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    /* Alert Banner */
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-3);
+      padding: var(--spacing-3) var(--spacing-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-4);
+      font-size: 14px;
+    }
+
+    .alert-error {
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
+    }
+
+    .alert-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Back to landing link */
+    .back-link {
+      position: absolute;
+      top: var(--spacing-6);
+      left: var(--spacing-6);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color var(--duration-normal);
+    }
+
+    .back-link:hover {
+      color: var(--color-text-primary);
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <a href="landing-page.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"/>
+      <polyline points="12,19 5,12 12,5"/>
+    </svg>
+    Back
+  </a>
+
+  <!-- Logo -->
+  <a href="landing-page.html" class="logo">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+      <path d="M16 8 L16 16 L22 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    ProductName
+  </a>
+
+  <!-- Login Card -->
+  <div class="login-card">
+    <h1 class="login-title">Welcome back</h1>
+
+    <!-- Social Login Buttons -->
+    <button class="btn btn-social">
+      <svg viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <button class="btn btn-social">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+      </svg>
+      Continue with GitHub
+    </button>
+
+    <div class="divider">
+      <span class="divider-text">or</span>
+    </div>
+
+    <!-- Login Form -->
+    <form action="#" method="POST">
+      <div class="form-group">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-input"
+          placeholder="you@example.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-input"
+          placeholder="Enter your password"
+          required
+        >
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="remember" name="remember" class="checkbox-input">
+        <label for="remember" class="checkbox-label">Remember me for 30 days</label>
+      </div>
+
+      <a href="#" class="form-link forgot-link">Forgot password?</a>
+
+      <button type="submit" class="btn btn-primary">
+        Log in
+      </button>
+    </form>
+
+    <div class="login-footer">
+      Don't have an account? <a href="#" class="form-link">Sign up</a>
+    </div>
+  </div>
+</body>
+</html>

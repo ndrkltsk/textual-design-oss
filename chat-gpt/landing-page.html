@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT - Get instant answers, find inspiration, learn something new</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      /* Colors - Light Mode */
+      --primary-black: #000000;
+      --primary-white: #ffffff;
+      --accent-green: #10A37F;
+      --accent-purple: #5865F2;
+
+      --bg-primary: #ffffff;
+      --bg-secondary: #f4f4f4;
+      --bg-tertiary: #ececec;
+      --bg-elevated: #ffffff;
+
+      --text-primary: #0d0d0d;
+      --text-secondary: #666666;
+      --text-tertiary: #999999;
+
+      --border-default: #e5e5e5;
+      --border-subtle: #f0f0f0;
+
+      /* Typography */
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+
+      /* Effects */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-2xl: 24px;
+      --radius-full: 9999px;
+
+      /* Animation */
+      --duration-normal: 200ms;
+      --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #212121;
+        --bg-secondary: #2f2f2f;
+        --bg-tertiary: #424242;
+        --bg-elevated: #2f2f2f;
+
+        --text-primary: #ececec;
+        --text-secondary: #b4b4b4;
+        --text-tertiary: #8e8e8e;
+
+        --border-default: #424242;
+        --border-subtle: #333333;
+      }
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      padding: 0 var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-black);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .logo {
+        background: var(--primary-white);
+      }
+      .logo svg {
+        fill: var(--primary-black);
+      }
+    }
+
+    .logo svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--primary-white);
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-primary);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-full);
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary-black);
+      color: var(--primary-white);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .btn-primary {
+        background: var(--primary-white);
+        color: var(--primary-black);
+      }
+      .btn-primary:hover {
+        background: #e5e5e5;
+      }
+    }
+
+    .btn-primary:hover {
+      background: #333333;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .btn-lg {
+      height: 48px;
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px var(--space-4) var(--space-16);
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-6);
+      max-width: 800px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 32px;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-10);
+      max-width: 600px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: var(--space-3);
+      margin-bottom: var(--space-12);
+    }
+
+    /* Chat Input Preview */
+    .chat-input-preview {
+      width: 100%;
+      max-width: 768px;
+      padding: 14px var(--space-4);
+      background: var(--bg-secondary);
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--border-default);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .chat-input-placeholder {
+      flex: 1;
+      font-size: 16px;
+      color: var(--text-tertiary);
+    }
+
+    .chat-input-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--duration-normal) var(--ease-default);
+    }
+
+    .chat-input-icon:hover {
+      background: var(--border-default);
+    }
+
+    .chat-input-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary);
+    }
+
+    /* Action Chips */
+    .action-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-top: var(--space-6);
+      max-width: 768px;
+    }
+
+    .action-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 10px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-default);
+      background: var(--bg-elevated);
+      font-size: 14px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .action-chip:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .action-chip svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--text-secondary);
+    }
+
+    /* Features Section */
+    .features {
+      padding: var(--space-16) var(--space-4);
+      background: var(--bg-secondary);
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .features-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+
+    .features-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      padding: var(--space-6);
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-default);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-primary);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Pricing Section */
+    .pricing {
+      padding: var(--space-16) var(--space-4);
+    }
+
+    .pricing-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .pricing-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pricing-card {
+      padding: var(--space-6);
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-default);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--accent-green);
+      position: relative;
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: var(--accent-green);
+      color: var(--primary-white);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-plan {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: var(--space-1);
+    }
+
+    .pricing-period {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      font-size: 14px;
+      margin-bottom: var(--space-3);
+    }
+
+    .pricing-features li svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent-green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: var(--space-12) var(--space-4);
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-8);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-brand-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-12);
+    }
+
+    @media (max-width: 768px) {
+      .footer-links {
+        flex-direction: column;
+        gap: var(--space-6);
+      }
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: var(--space-2);
+    }
+
+    .footer-column a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+
+    .footer-column a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: var(--space-8) auto 0;
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-default);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .footer-legal a {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+
+    .footer-legal a:hover {
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.6 8.3829l2.02-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+        </svg>
+      </div>
+      <span class="brand-name">ChatGPT</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#" class="nav-link">Enterprise</a>
+      <a href="#" class="nav-link">Research</a>
+    </nav>
+    <div class="header-actions">
+      <a href="login-form.html" class="btn btn-secondary">Log in</a>
+      <a href="#" class="btn btn-primary">Sign up</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="hero-title">Get answers. Find inspiration. Be more productive.</h1>
+    <p class="hero-subtitle">Free to use. Easy to try. Just ask and ChatGPT can help with writing, learning, brainstorming and more.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary btn-lg">Start now</a>
+      <a href="#" class="btn btn-secondary btn-lg">Download app</a>
+    </div>
+
+    <div class="chat-input-preview">
+      <span class="chat-input-placeholder">Ask anything</span>
+      <div class="chat-input-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4L12 20M12 4L6 10M12 4L18 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="action-chips">
+      <button class="action-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Help me write
+      </button>
+      <button class="action-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+        Get advice
+      </button>
+      <button class="action-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        Analyze data
+      </button>
+      <button class="action-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Create images
+      </button>
+      <button class="action-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+        </svg>
+        Write code
+      </button>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="features-container">
+      <div class="features-header">
+        <h2 class="features-title">Explore the possibilities</h2>
+        <p class="features-subtitle">ChatGPT can help you with a wide range of tasks</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Writing & Editing</h3>
+          <p class="feature-description">Draft emails, essays, and documents. Get help with grammar, style, and structure.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Code & Debug</h3>
+          <p class="feature-description">Write, explain, and debug code in any programming language. Get technical help instantly.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 14l9-5-9-5-9 5 9 5zm0 7l9-5-9-5-9 5 9 5z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Learn & Study</h3>
+          <p class="feature-description">Get explanations on complex topics, prepare for tests, and explore new subjects.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Image Generation</h3>
+          <p class="feature-description">Create unique images from text descriptions with DALL-E integration.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Research & Analysis</h3>
+          <p class="feature-description">Get comprehensive research with Deep Research. Analyze documents and data.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Voice Conversations</h3>
+          <p class="feature-description">Have natural voice conversations. Ask questions hands-free and get spoken responses.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="pricing">
+    <div class="pricing-container">
+      <div class="pricing-header">
+        <h2 class="pricing-title">Choose your plan</h2>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3 class="pricing-plan">Free</h3>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-period">per month</div>
+          <p class="pricing-description">For individuals just getting started</p>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Access to GPT-4o mini
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Limited access to GPT-4o
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Limited access to file uploads, data analysis, web browsing
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Access to GPT Store
+            </li>
+          </ul>
+          <a href="#" class="btn btn-secondary" style="width: 100%;">Get started</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <span class="pricing-badge">Popular</span>
+          <h3 class="pricing-plan">Plus</h3>
+          <div class="pricing-price">$20</div>
+          <div class="pricing-period">per month</div>
+          <p class="pricing-description">For individuals who want more</p>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Everything in Free
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Extended access to GPT-4o, o1, and more
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Access to Deep Research
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              DALL-E image generation
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Advanced Voice Mode
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              Create and use custom GPTs
+            </li>
+          </ul>
+          <a href="#" class="btn btn-primary" style="width: 100%;">Upgrade to Plus</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <div class="footer-brand">
+          <div class="logo" style="width: 24px; height: 24px;">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;">
+              <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729z"/>
+            </svg>
+          </div>
+          <span class="footer-brand-name">ChatGPT</span>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Enterprise</a></li>
+            <li><a href="#">Apps</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">Status</a></li>
+            <li><a href="#">Community</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">OpenAI &copy; 2024</p>
+      <div class="footer-legal">
+        <a href="#">Terms of use</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Brand guidelines</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

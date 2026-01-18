@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      /* Colors - Light Theme */
+      --color-primary: #CC785C;
+      --color-primary-hover: #B86A50;
+      --color-accent-purple: #6B5B95;
+      --color-accent-purple-hover: #5D4F84;
+      --color-accent-teal: #4A9B8C;
+      --color-accent-blue: #4A90A4;
+
+      --color-bg-primary: #F5F5F0;
+      --color-bg-secondary: #EDEEE8;
+      --color-bg-tertiary: #E8E8E2;
+      --color-bg-card: #FFFFFF;
+
+      --color-text-primary: #1A1A1A;
+      --color-text-secondary: #4A4A4A;
+      --color-text-tertiary: #6B6B6B;
+      --color-text-inverse: #FFFFFF;
+
+      --color-border-primary: #D4D4CE;
+      --color-border-secondary: #E0E0DA;
+
+      /* Typography */
+      --font-family-display: 'Georgia', serif;
+      --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing */
+      --spacing-1: 4px;
+      --spacing-2: 8px;
+      --spacing-3: 12px;
+      --spacing-4: 16px;
+      --spacing-6: 24px;
+      --spacing-8: 32px;
+      --spacing-12: 48px;
+      --spacing-16: 64px;
+      --spacing-20: 80px;
+
+      /* Borders */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 2px 4px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 8px rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.08);
+
+      /* Motion */
+      --duration-fast: 100ms;
+      --duration-normal: 200ms;
+      --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family-body);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-primary);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      height: 56px;
+      padding: 0 var(--spacing-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--color-bg-primary);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-family-display);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-6);
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+
+    .nav-link:hover {
+      color: var(--color-text-primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-2);
+      height: 44px;
+      padding: 12px 20px;
+      font-family: var(--font-family-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-border-secondary);
+    }
+
+    .btn-accent {
+      background-color: var(--color-accent-purple);
+      color: var(--color-text-inverse);
+    }
+
+    .btn-accent:hover {
+      background-color: var(--color-accent-purple-hover);
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-20) var(--spacing-6);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-family: var(--font-family-display);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto var(--spacing-8);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: var(--spacing-4);
+      justify-content: center;
+    }
+
+    /* Features Section */
+    .features {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-16) var(--spacing-6);
+    }
+
+    .section-title {
+      font-family: var(--font-family-display);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.25;
+      text-align: center;
+      margin-bottom: var(--spacing-12);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-6);
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background-color: var(--color-bg-card);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-6);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--duration-normal) var(--ease-default);
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--color-bg-tertiary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--spacing-4);
+      color: var(--color-primary);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: var(--spacing-2);
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Pricing Section */
+    .pricing {
+      background-color: var(--color-bg-secondary);
+      padding: var(--spacing-16) var(--spacing-6);
+    }
+
+    .pricing-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-6);
+      margin-top: var(--spacing-12);
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pricing-card {
+      background-color: var(--color-bg-card);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-8);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--color-accent-purple);
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      padding: var(--spacing-1) var(--spacing-2);
+      background-color: var(--color-accent-teal);
+      color: var(--color-text-inverse);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .pricing-name {
+      font-family: var(--font-family-display);
+      font-size: 24px;
+      margin-bottom: var(--spacing-2);
+    }
+
+    .pricing-price {
+      font-size: 40px;
+      font-weight: 600;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-text-tertiary);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--spacing-6);
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-2);
+      padding: var(--spacing-2) 0;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .pricing-features li svg {
+      flex-shrink: 0;
+      color: var(--color-accent-teal);
+      margin-top: 2px;
+    }
+
+    /* CTA Section */
+    .cta {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: var(--spacing-16) var(--spacing-6);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-family: var(--font-family-display);
+      font-size: 32px;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .cta-description {
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-6);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #2D2A26;
+      color: var(--color-bg-primary);
+      padding: var(--spacing-12) var(--spacing-6);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--spacing-8);
+    }
+
+    .footer-brand {
+      font-family: var(--font-family-display);
+      font-size: 20px;
+      margin-bottom: var(--spacing-2);
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: #9A9A94;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--spacing-12);
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: var(--spacing-2);
+    }
+
+    .footer-column a {
+      font-size: 14px;
+      color: #C8C8C2;
+      text-decoration: none;
+      transition: color var(--duration-normal);
+    }
+
+    .footer-column a:hover {
+      color: var(--color-bg-primary);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: var(--spacing-8) auto 0;
+      padding-top: var(--spacing-6);
+      border-top: 1px solid #4A4845;
+      font-size: 13px;
+      color: #9A9A94;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="#" class="logo">ProductName</a>
+    <nav class="nav">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#" class="nav-link">About</a>
+      <a href="login-form.html" class="btn btn-secondary">Log in</a>
+      <a href="#" class="btn btn-primary">Get Started</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="hero-title">Build something<br>amazing today</h1>
+    <p class="hero-subtitle">
+      The intelligent platform that helps you work smarter, not harder.
+      Streamline your workflow and boost productivity with our powerful tools.
+    </p>
+    <div class="hero-buttons">
+      <a href="#" class="btn btn-primary">Start Free Trial</a>
+      <a href="#" class="btn btn-secondary">Watch Demo</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2 class="section-title">Everything you need</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Smart Organization</h3>
+        <p class="feature-description">
+          Keep all your projects organized with intelligent categorization and powerful search capabilities.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Real-time Sync</h3>
+        <p class="feature-description">
+          Work across devices seamlessly with instant synchronization and offline support.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Team Collaboration</h3>
+        <p class="feature-description">
+          Invite teammates and collaborate in real-time with shared workspaces and permissions.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Custom Views</h3>
+        <p class="feature-description">
+          Create personalized dashboards and views that match your unique workflow.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Enterprise Security</h3>
+        <p class="feature-description">
+          Bank-level encryption and compliance certifications keep your data safe and secure.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Advanced Analytics</h3>
+        <p class="feature-description">
+          Gain insights with powerful analytics and customizable reports.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="pricing-container">
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name">Free</div>
+          <div class="pricing-price">$0 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Up to 3 projects
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Basic analytics
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Community support
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              1GB storage
+            </li>
+          </ul>
+          <a href="#" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+          <span class="pricing-badge">Popular</span>
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-price">$18 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Unlimited projects
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Advanced analytics
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Priority support
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              100GB storage
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+              Team collaboration
+            </li>
+          </ul>
+          <a href="#" class="btn btn-accent" style="width: 100%;">Subscribe to Pro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2 class="cta-title">Ready to get started?</h2>
+    <p class="cta-description">
+      Join thousands of teams already using our platform to achieve more.
+    </p>
+    <a href="#" class="btn btn-primary">Start Your Free Trial</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <div class="footer-brand">ProductName</div>
+        <p class="footer-tagline">Building the future of productivity.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Integrations</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Security</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 ProductName. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
